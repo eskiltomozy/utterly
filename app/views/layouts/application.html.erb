@@ -8,8 +8,32 @@
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
-
   <body>
+
+<!-- alert -->
+    <% if notice.present? %>
+      <p class="notice"><%= notice %></p>
+      <br/>
+    <% end %>
+    <% if alert.present? %>
+      <p class="alert"><%= alert %></p>
+      <br/>
+    <% end %>    
+
+<!-- user -->
+    <% if current_user %>
+      Signed in as User # <%= current_user.id %>
+      <br/>
+      <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %>
+    <% else %>
+      <%= link_to 'Sign In', new_user_session_path %>
+      <br/>
+      <%= link_to 'Sign Up', new_user_registration_path %>
+    <% end %>
+    <br/>
+
+<!-- yield -->
     <%= yield %>
+
   </body>
 </html>

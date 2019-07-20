@@ -1,4 +1,4 @@
 <%= simple_form_for @gram do |f| %>
-  <%= f.input :message %>
+  <%= f.input :message, required: true, label: false, placeholder: 'comment' %>
   <%= f.submit "Post" %>
 <% end %>
