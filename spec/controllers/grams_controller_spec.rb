@@ -50,4 +50,17 @@ RSpec.describe GramsController, type: :controller do
       expect(gram_count).to eq Gram.count
     end
   end
+
+  describe 'grams#show action' do
+    it 'should show gram found' do
+      gram = FactoryBot.create(:gram)
+      get :show, params: {id: gram.id}
+      expect(response).to have_http_status(:success)
+    end
+
+    it 'should show 404 error gram not found' do
+      get :show, params: {id: 'NOPE'}
+      expect(response).to have_http_status(:not_found)
+    end
+  end
 end
