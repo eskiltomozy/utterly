@@ -22,7 +22,6 @@ RSpec.describe GramsController, type: :controller do
     it 'should show new form' do
       user = FactoryBot.create(:user)
       sign_in user
-
       get :new
       expect(response).to have_http_status(:success)
     end
@@ -32,25 +31,23 @@ RSpec.describe GramsController, type: :controller do
 
   describe 'grams#create action' do
     it 'should require logged in user' do
-      post :create, params: {gram: {message: 'Hello'}}
+      post :create, params: {gram: {message: 'user logged in'}}
       expect(response).to redirect_to new_user_session_path
     end
 
     it 'should create new gram' do
       user = FactoryBot.create(:user)
       sign_in user
-
-      post :create, params: {gram: {message: 'Hello'}}
+      post :create, params: {gram: {message: 'new gram', image: fixture_file_upload('/image.png', 'image/png')}}
       expect(response).to redirect_to root_path
       gram = Gram.last
-      expect(gram.message).to eq('Hello')
+      expect(gram.message).to eq('new gram')
       expect(gram.user).to eq(user)
     end
 
     it 'should validate errors' do
       user = FactoryBot.create(:user)
       sign_in user
-
       gram_count = Gram.count
       post :create, params: {gram: {message: ''}}
       expect(response).to have_http_status(:unprocessable_entity)
@@ -68,7 +65,7 @@ RSpec.describe GramsController, type: :controller do
     end
 
     it 'should return 404 error gram not found' do
-      get :show, params: {id: 'NOPE'}
+      get :show, params: {id: 'not found'}
       expect(response).to have_http_status(:not_found)
     end
   end
@@ -100,7 +97,7 @@ RSpec.describe GramsController, type: :controller do
     it 'should return 404 error edit form not found' do
       user = FactoryBot.create(:user)
       sign_in user
-      get :edit, params: {id: 'NOPE'}
+      get :edit, params: {id: 'not found'}
       expect(response).to have_http_status(:not_found)
     end
   end
@@ -112,39 +109,39 @@ RSpec.describe GramsController, type: :controller do
       gram = FactoryBot.create(:gram)
       user = FactoryBot.create(:user)
       sign_in user
-      patch :update, params: {id: gram.id, gram: {message: 'Nope'}}
+      patch :update, params: {id: gram.id, gram: {message: 'wrong user'}}
       expect(response).to have_http_status(:forbidden)
     end    
 
     it 'should authenticate user before update gram' do
       gram = FactoryBot.create(:gram)
-      patch :update, params: {id: gram.id, gram: {message: 'Nope'}}
+      patch :update, params: {id: gram.id, gram: {message: 'wrong gram user'}}
       expect(response).to redirect_to new_user_session_path
     end
 
     it 'should show gram update' do
-      gram = FactoryBot.create(:gram, message: 'Initial Value')
+      gram = FactoryBot.create(:gram, message: 'initial value')
       sign_in gram.user
-      patch :update, params: {id: gram.id, gram: {message: 'Updated'}}
+      patch :update, params: {id: gram.id, gram: {message: 'gram updated'}}
       expect(response).to redirect_to root_path
       gram.reload
-      expect(gram.message).to eq 'Updated'
+      expect(gram.message).to eq 'gram updated'
     end
 
     it 'should return 404 error gram not found' do
       user = FactoryBot.create(:user)
       sign_in user
-      patch :update, params: {id: 'NOPE', gram: {message: 'Updated'}}
+      patch :update, params: {id: 'none', gram: {message: 'gram not found'}}
       expect(response).to have_http_status(:not_found)
     end
 
     it 'should render edit form unprocessable_entity' do
-      gram = FactoryBot.create(:gram, message: 'Initial Value')
+      gram = FactoryBot.create(:gram, message: 'initial value')
       sign_in gram.user
       patch :update, params: {id: gram.id, gram: {message: ''}}
       expect(response).to have_http_status(:unprocessable_entity)
       gram.reload
-      expect(gram.message).to eq 'Initial Value'
+      expect(gram.message).to eq 'initial value'
     end
   end
 
@@ -177,7 +174,7 @@ RSpec.describe GramsController, type: :controller do
     it 'should return 404 error specified gram id not found' do
       user = FactoryBot.create(:user)
       sign_in user
-      delete :destroy, params: {id: 'Gone'}
+      delete :destroy, params: {id: 'gram deleted'}
       expect(response).to have_http_status(:not_found)
     end
   end

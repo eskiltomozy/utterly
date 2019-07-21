@@ -1,4 +1,5 @@
 <%= simple_form_for @gram do |f| %>
   <%= f.input :message, required: true, label: false, placeholder: 'comment' %>
+  <%= f.input_field :image, class: 'enter-button float-left' %>
   <%= f.submit "Post" %>
 <% end %>
