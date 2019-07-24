@@ -6,24 +6,29 @@ html, body {
   height: 100%;  
   margin: 0px;
   padding: 0px;
-  color: #ccc;
+  color: rgba(200,200,200,1.0);
   font-family: 'Montserrat', sans-serif;
   background-color: rgba(50,50,50,1.0);
-  background: url('background.png') fixed;
+  background: url('/assets/background.png') fixed;
 }
 
 body {
   overflow-y: scroll; 
 }
 
-a {
-  color: #ccc;
+a, .signin, .signup, .forgot, .newpost, .editpost {
+  color: rgba(200,200,200,1.0);
   font-weight: 700;
   text-decoration: none;
 }
 
-a:hover {
+a:hover, .signin:hover, .signup:hover, .forgot:hover, .newpost:hover, .editpost:hover {
   color: rgba(250,125,0,1.0);
+  text-decoration: none;
+}
+
+#SignIn, #SignUp, #Forgot, #NewPost, #EditPost {
+  display: none;
 }
 
 .alert, .notice {
@@ -53,7 +58,7 @@ a:hover {
 
 .u-columns {
   display: grid;
-  grid-template-columns: auto 486px auto;
+  grid-template-columns: auto 480px auto;
   width: 100%;
   height: 100%;  
 }
@@ -71,7 +76,7 @@ a:hover {
   -webkit-box-shadow: 0px 10px 15px rgba(0,0,0,0.8);
   -moz-box-shadow: 0px 10px 15px rgba(0,0,0,0.8);
   box-shadow: 0px 10px 15px rgba(0,0,0,0.8);
-  z-index: 10;
+  z-index: 2;
 }
 
 .u-content {
@@ -86,10 +91,7 @@ a:hover {
   top: 10px;
   left: -30px;
   width: 260px;
-}
-
-#SignIn, #SignUp, #Forgot, #NewPost, #EditPost {
-  display: none;
+  z-index: 2;
 }
 
 .u-form {
@@ -135,13 +137,12 @@ a:hover {
 
 .text > textarea {
   padding: 10px;
-  min-height: 20px;
+  min-height: 44px;
 }
 
 .file.u-enter {
-  height: 20px;
-  padding: 5px;
-  line-height: 10px;
+  padding: 0px;
+  line-height: 26px;
 }
 
 .u-enter {
@@ -165,7 +166,7 @@ a:hover {
 
 .u-enter:hover {
   background-color: rgba(250,125,0,1.0);
-  color: rgba(0,0,0,1.0);
+  color: rgba(250,250,250,1.0);
 }
 
 
