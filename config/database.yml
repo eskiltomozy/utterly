@@ -85,5 +85,5 @@ test:
 production:
   <<: *default
   database: utterly_production
-  username: utterly
-  password: <%= ENV['UTTERLY_DATABASE_PASSWORD'] %>
+#  username: utterly
+#  password: <%= ENV['UTTERLY_DATABASE_PASSWORD'] %>
