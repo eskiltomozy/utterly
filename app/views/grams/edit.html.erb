@@ -1,4 +1,6 @@
-<%= simple_form_for @gram do |f| %>
-  <%= f.input :message, required: true, label: false, placeholder: 'comment' %>
-  <%= f.submit "Post" %>
-<% end %>
+<div class="u-form">
+  <%= simple_form_for @gram do |f| %>
+    <%= f.input :message, required: true, label: false, input_html: {maxlength: 100} %>
+    <%= f.submit 'Update Post', class: 'u-enter float-right' %>
+  <% end %>
+</div>

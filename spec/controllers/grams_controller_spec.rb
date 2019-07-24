@@ -16,7 +16,7 @@ RSpec.describe GramsController, type: :controller do
   describe 'grams#new action' do
     it 'should require logged in user' do
       get :new
-      expect(response).to redirect_to new_user_session_path
+      expect(response).to redirect_to root_path
     end
 
     it 'should show new form' do
@@ -32,7 +32,7 @@ RSpec.describe GramsController, type: :controller do
   describe 'grams#create action' do
     it 'should require logged in user' do
       post :create, params: {gram: {message: 'user logged in'}}
-      expect(response).to redirect_to new_user_session_path
+      expect(response).to redirect_to root_path
     end
 
     it 'should create new gram' do
@@ -50,7 +50,7 @@ RSpec.describe GramsController, type: :controller do
       sign_in user
       gram_count = Gram.count
       post :create, params: {gram: {message: ''}}
-      expect(response).to have_http_status(:unprocessable_entity)
+      expect(response).to have_http_status(:found)
       expect(gram_count).to eq Gram.count
     end
   end
@@ -84,7 +84,7 @@ RSpec.describe GramsController, type: :controller do
     it 'should authenticate user before edit gram' do
       gram = FactoryBot.create(:gram)
       get :edit, params: {id: gram.id}
-      expect(response).to redirect_to new_user_session_path
+      expect(response).to redirect_to root_path
     end
 
     it 'should show edit form' do
@@ -116,14 +116,14 @@ RSpec.describe GramsController, type: :controller do
     it 'should authenticate user before update gram' do
       gram = FactoryBot.create(:gram)
       patch :update, params: {id: gram.id, gram: {message: 'wrong gram user'}}
-      expect(response).to redirect_to new_user_session_path
+      expect(response).to redirect_to root_path
     end
 
     it 'should show gram update' do
       gram = FactoryBot.create(:gram, message: 'initial value')
       sign_in gram.user
       patch :update, params: {id: gram.id, gram: {message: 'gram updated'}}
-      expect(response).to redirect_to root_path
+      expect(response).to redirect_to gram_path(gram)
       gram.reload
       expect(gram.message).to eq 'gram updated'
     end
@@ -159,7 +159,7 @@ RSpec.describe GramsController, type: :controller do
     it 'should authenticate user before destroy gram' do
       gram = FactoryBot.create(:gram)
       delete :destroy, params: {id: gram.id}
-      expect(response).to redirect_to new_user_session_path
+      expect(response).to redirect_to root_path
     end
 
     it 'should destroy gram' do

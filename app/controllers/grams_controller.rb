@@ -2,7 +2,7 @@ class GramsController < ApplicationController
   before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
 
   def index
-    @grams = Gram.all
+    @grams = Gram.all.order(updated_at: :desc)
   end
 
   def new
@@ -11,11 +11,10 @@ class GramsController < ApplicationController
 
   def create
     @gram = current_user.grams.create(gram_params)
-    if @gram.valid?
-      redirect_to root_path
-    else
-      render :new, status: :unprocessable_entity
+    if @gram.invalid?
+      flash[:alert] = 'Post must include a 5-100 character message & an image'
     end
+    redirect_to root_path
   end
 
   def show
@@ -35,7 +34,7 @@ class GramsController < ApplicationController
     return render_not_found(:forbidden) if @gram.user != current_user
     @gram.update_attributes(gram_params)
     if @gram.valid?
-      redirect_to root_path
+      redirect_to gram_path(@gram)
     else
       return render :edit, status: :unprocessable_entity
     end

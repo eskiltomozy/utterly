@@ -8,32 +8,94 @@
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
-  <body>
 
-<!-- alert -->
-    <% if notice.present? %>
-      <p class="notice"><%= notice %></p>
-      <br/>
-    <% end %>
-    <% if alert.present? %>
-      <p class="alert"><%= alert %></p>
-      <br/>
-    <% end %>    
+  <body>
+    <div class="u-columns">
+      <div></div>
+      <div>
+
+<!-- header -->
+        <div class="u-header">
+          <div class="u-logo">
+            <a href="/#">
+              <%= render file: "app/assets/images/utterly_logo.svg" %>
+            </a>
+          </div>   
 
 <!-- user -->
-    <% if current_user %>
-      Signed in as User # <%= current_user.id %>
-      <br/>
-      <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %>
-    <% else %>
-      <%= link_to 'Sign In', new_user_session_path %>
-      <br/>
-      <%= link_to 'Sign Up', new_user_registration_path %>
-    <% end %>
-    <br/>
+          <div class="u-sign">
+            <% if  @gram.present? && current_user == @gram.user %>
+              <a class="editpost">Edit</a> | <%= link_to 'Delete Post', gram_path, method: :delete, data: {confirm: 'Are you sure you want to delete is Post?'} %> | <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %>
+            <% elsif current_user %>
+              <a class="newpost">New Post</a> | <%= link_to 'Sign Out', destroy_user_session_path, method: :delete %>
+            <% else %>
+              <a class="signup">Sign Up</a> | <a class="signin">Sign In</a>
+            <% end %>
+
+<!-- forms -->
+            <div id="SignIn">
+              <%= render template: "devise/sessions/new" %>
+            </div>
+            <div id="SignUp">
+              <%= render template: "devise/registrations/new" %>
+            </div>
+            <div id="Forgot">
+              <%= render template: "devise/passwords/new" %>
+            </div>
+            <div id="NewPost">
+              <%= render template: "grams/new" %>
+            </div>
+            <% if current_user && @gram.present? %>
+              <div id="EditPost">
+                <%= render template: "grams/edit" %>
+              </div>
+            <% end %>
+          </div>
+
+<!-- show/hide -->
+          <script>
+            $( ".signin" ).click(function() {
+              $( "#SignIn" ).toggle();
+              $( "#SignUp" ).hide();
+              $( "#Forgot" ).hide();
+            });
+            $( ".signup" ).click(function() {
+              $( "#SignIn" ).hide();
+              $( "#SignUp" ).toggle();
+              $( "#Forgot" ).hide();
+            });
+            $( ".forgot" ).click(function() {
+              $( "#SignIn" ).hide();
+              $( "#SignUp" ).hide();
+              $( "#Forgot" ).show();
+            });
+            $( ".newpost" ).click(function() {
+              $( "#NewPost" ).toggle();
+
+            });
+            $( ".editpost" ).click(function() {
+              $( "#EditPost" ).toggle();
+            });
+          </script>
+
+<!-- alert -->
+          <% if notice.present? %>
+            <p class="notice"><%= notice %></p>
+          <% end %>
+          <% if alert.present? %>
+            <p class="alert"><%= alert %></p>
+          <% end %>
+        </div>
+
+<!-- content -->
+        <div class="u-content">
 
 <!-- yield -->
-    <%= yield %>
+          <%= yield %>
+        </div>
 
+      </div>
+      <div></div>
+    </div>
   </body>
 </html>

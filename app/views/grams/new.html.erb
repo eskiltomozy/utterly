@@ -1,5 +1,7 @@
-<%= simple_form_for @gram do |f| %>
-  <%= f.input :message, required: true, label: false, placeholder: 'comment' %>
-  <%= f.input_field :image, class: 'enter-button float-left' %>
-  <%= f.submit "Post" %>
-<% end %>
+<div class="u-form">
+  <%= simple_form_for Gram.new do |f| %>
+    <%= f.input :message, required: true, label: false, placeholder: 'Post must include a 5-100 character message & an image', input_html: {maxlength: 100} %>
+    <%= f.input_field :image, class: 'u-enter float-left' %>
+    <%= f.submit 'Add Post', class: 'u-enter float-right' %>
+  <% end %>
+</div>

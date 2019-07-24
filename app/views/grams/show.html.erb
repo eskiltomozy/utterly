@@ -1,2 +1,78 @@
-<%= @gram.message %>
-<%= image_tag @gram.image.url %>
+<!-- post -->
+  <div class="u-post">
+    <div id="u-show<%= @gram.id %>" class="u-image u-show" style="background-image: url(<%= @gram.image.url %>)"></div>
+    <div class="u-message">
+      <span class="fa fa-user-circle" style="font-size:20px;"></span> # <%= @gram.user_id %> … <%= @gram.message %>
+    </div>
+  </div>
+
+<!-- next -->
+  <% if @gram.next_gram.present? %>
+    <div class="u-next">
+      <%= link_to gram_path(@gram.next_gram) do %>
+        <span class="fa fa-arrow-right" style="font-size:24px;"></span>
+      <% end %>
+      <span class="u-text">next</span>
+    </div>
+  <% end %>
+
+<!-- previous -->
+  <% if @gram.previous_gram.present? %>
+    <div class="u-previous">  
+      <%= link_to gram_path(@gram.previous_gram) do %>
+        <span class="fa fa-arrow-left" style="font-size:24px;"></span>
+        <% end %>
+      <span class="u-text">previous</span>
+    </div>
+  <% end %>
+
+<!-- comments -->
+  <div class="u-comment">
+    <div id="AddComment" class="u-form">
+      <%= simple_form_for Comment.new, url: gram_comments_path(@gram) do |f| %>
+        <%= f.input :message, required: true, label: false, placeholder: 'Comment must be between 5-100 characters', input_html: {maxlength: 100} %>
+        <%= f.submit 'Add Comment', class: 'u-enter' %>
+      <% end %>
+    </div>
+    <div class="u-user-comments">
+      <% @gram.comments.order(created_at: :desc).each do |comment| %>
+        <span class="u-user fa fa-user-circle" style="font-size:20px;"></span><span class="u-user"> # <%= comment.user.id %></span>
+        <br/>
+        <span class="u-user-message"><%= comment.message %></span>
+        <hr/>
+      <% end %>
+    </div>
+  </div>
+  <div class="u-new-comment addcomment">
+    <span class="fa fa-plus" style="font-size:25px;"></span>
+    <span class="u-text">comment</span>
+  </div>
+
+<!-- image popup -->
+  <div id="u-hide<%= @gram.id %>" class="u-hide" >
+    <div class="u-grid-popup">
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div class="u-image-popup">
+        <%= image_tag @gram.image.url %>
+      </div>
+      <div></div>
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+  <script>
+    $( ".addcomment" ).click(function() {
+      $( "#AddComment" ).toggle();
+    });
+    $( "#u-show<%= @gram.id %>" ).click(function() {
+      $( "#u-hide<%= @gram.id %>" ).show( "fade", 300 );
+    });
+    $( "#u-hide<%= @gram.id %>" ).click(function() {
+      $( "#u-hide<%= @gram.id %>" ).hide( "fade", 300 );
+    });
+  </script>

@@ -8,7 +8,7 @@ RSpec.describe CommentsController, type: :controller do
     it 'should require logged in user' do
       gram = FactoryBot.create(:gram)      
       post :create, params: {gram_id: gram.id, comment: {message: 'user logged in'}}
-      expect(response).to redirect_to new_user_session_path
+      expect(response).to redirect_to root_path
     end
 
     it 'should create new comment' do
@@ -16,7 +16,7 @@ RSpec.describe CommentsController, type: :controller do
       user = FactoryBot.create(:user)
       sign_in user
       post :create, params: {gram_id: gram.id, comment: {message: 'new comment'}}
-      expect(response).to redirect_to root_path
+      expect(response).to redirect_to gram_path(gram)
       expect(gram.comments.length).to eq 1
       expect(gram.comments.first.message).to eq 'new comment'
     end
