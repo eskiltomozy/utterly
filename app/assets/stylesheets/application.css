@@ -11,11 +11,9 @@
  * It is generally better to create a new file per style scope.
  *
  *= require jquery-ui
+ *= require font-awesome
  *= require_tree .
  *= require_self
- *= require grams
- *= require comments
- *= require font-awesome
  */
 
 @import "bootstrap";
